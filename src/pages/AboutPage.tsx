@@ -790,7 +790,7 @@ export const AboutPage: React.FC = () => {
                     },
                   }}
                 >
-                  Get Started for Free
+                  Book Consultation
                 </Button>
               </MotionBox>
               <MotionBox

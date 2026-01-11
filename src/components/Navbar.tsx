@@ -19,6 +19,7 @@ import { useState } from "react"
 import { Link as RouterLink, useLocation } from "react-router-dom"
 import { motion } from "framer-motion"
 import { glassStyles } from "../theme/theme"
+import bigeenLogo from "../assets/images/bigeen-logo.png"
 
 // Create motion-enabled components
 const MotionBox = motion.create(Box)
@@ -65,35 +66,26 @@ export const Navbar: React.FC = () => {
               sx={{
                 display: "flex",
                 alignItems: "center",
-                gap: 1,
+                gap: 1.5,
                 textDecoration: "none",
               }}
             >
               <MotionBox
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                sx={{ display: "flex", alignItems: "center", gap: 1.5 }}
               >
                 <Box
+                  component="img"
+                  src={bigeenLogo}
+                  alt="Bigeen Logo"
                   sx={{
-                    width: 32,
-                    height: 32,
-                    borderRadius: 1,
-                    background:
-                      "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    boxShadow: "0 4px 14px rgba(102, 126, 234, 0.4)",
+                    width: 36,
+                    height: 36,
+                    borderRadius: 1.5,
+                    objectFit: "contain",
                   }}
-                >
-                  <Typography
-                    variant="h6"
-                    sx={{ color: "white", fontWeight: 700, fontSize: "1.2rem" }}
-                  >
-                    B
-                  </Typography>
-                </Box>
+                />
                 <Typography
                   variant="h6"
                   sx={{

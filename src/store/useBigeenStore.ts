@@ -1,6 +1,11 @@
 import { create } from "zustand"
+import type { ViewMode } from "../data/content"
 
 interface BigeenState {
+  // App Mode State (Dual-Mode Strategy)
+  appMode: ViewMode
+  setAppMode: (mode: ViewMode) => void
+
   // Contact Form State
   contactForm: {
     fullName: string
@@ -33,6 +38,10 @@ const initialContactForm = {
 }
 
 export const useBigeenStore = create<BigeenState>((set) => ({
+  // App Mode (default to Software/Product mode)
+  appMode: "Software",
+  setAppMode: (mode) => set({ appMode: mode }),
+
   // Contact Form
   contactForm: initialContactForm,
   setContactFormField: (field, value) =>

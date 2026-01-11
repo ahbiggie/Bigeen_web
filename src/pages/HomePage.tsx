@@ -4,43 +4,16 @@ import {
   Typography,
   Button,
   Stack,
-  Chip,
   Card,
   Grid,
 } from "@mui/material"
 import { ArrowForward, PlayArrow, Star } from "@mui/icons-material"
-import AutoGraphIcon from "@mui/icons-material/AutoGraph"
-import GppGoodIcon from "@mui/icons-material/GppGood"
-import BoltIcon from "@mui/icons-material/Bolt"
 import { motion } from "framer-motion"
 import { gradients, glassStyles, blobKeyframes } from "../theme/theme"
 import { FeatureCard } from "../components/ui/FeatureCard"
-import type { Feature } from "../types"
-
-// ============================================
-// FEATURES DATA
-// ============================================
-
-const FEATURES: Feature[] = [
-  {
-    id: "1",
-    title: "High Velocity",
-    description: "Built on Vite for sub-second load times and instant HMR.",
-    icon: BoltIcon,
-  },
-  {
-    id: "2",
-    title: "Enterprise Grade",
-    description: "Bank-level security standards baked into every endpoint.",
-    icon: GppGoodIcon,
-  },
-  {
-    id: "3",
-    title: "Data Visualization",
-    description: "Turning raw metrics into actionable, animated insights.",
-    icon: AutoGraphIcon,
-  },
-]
+import { ModeSwitch } from "../components/home/ModeSwitch"
+import { useBigeenStore } from "../store/useBigeenStore"
+import { CONTENT } from "../data/content"
 
 // ============================================
 // MOTION COMPONENTS
@@ -136,6 +109,9 @@ const floatAnimation = {
 // ============================================
 
 export const HomePage: React.FC = () => {
+  const { appMode } = useBigeenStore()
+  const content = appMode === "Software" ? CONTENT.dev : CONTENT.consult
+
   return (
     <Box>
       {/* ======================== HERO SECTION ======================== */}
@@ -198,18 +174,11 @@ export const HomePage: React.FC = () => {
                 initial="hidden"
                 animate="visible"
               >
+                {/* Mode Switch */}
                 <MotionBox variants={itemVariants}>
-                  <Chip
-                    label="✨ Now Available for Early Access"
-                    sx={{
-                      ...glassStyles.light,
-                      color: "primary.main",
-                      fontWeight: 600,
-                      fontSize: "0.813rem",
-                      px: 1,
-                    }}
-                  />
+                  <ModeSwitch />
                 </MotionBox>
+
                 <MotionTypography
                   variant="h1"
                   variants={itemVariants}
@@ -218,18 +187,7 @@ export const HomePage: React.FC = () => {
                     color: "text.primary",
                   }}
                 >
-                  Scale Your Micro-
-                  <Box
-                    component="span"
-                    sx={{
-                      background: gradients.accent,
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                    }}
-                  >
-                    SaaS
-                  </Box>{" "}
-                  Stack.
+                  {content.hero.headline}
                 </MotionTypography>
                 <MotionTypography
                   variant="body1"
@@ -240,9 +198,7 @@ export const HomePage: React.FC = () => {
                     maxWidth: 520,
                   }}
                 >
-                  Integrated tools for the modern founder. Automate workflows,
-                  analyze growth, and scale infrastructure without the
-                  enterprise bloat.
+                  {content.hero.subhead}
                 </MotionTypography>
 
                 {/* CTA Buttons */}
@@ -270,7 +226,7 @@ export const HomePage: React.FC = () => {
                           },
                         }}
                       >
-                        Get Early Access
+                        {content.hero.ctaPrimary}
                       </Button>
                     </MotionBox>
                     <MotionBox
@@ -294,7 +250,7 @@ export const HomePage: React.FC = () => {
                           },
                         }}
                       >
-                        Watch Demo
+                        {content.hero.ctaSecondary}
                       </Button>
                     </MotionBox>
                   </Stack>
@@ -320,7 +276,7 @@ export const HomePage: React.FC = () => {
                       variant="body2"
                       sx={{ color: "text.secondary", fontWeight: 500 }}
                     >
-                      Trusted by 500+ founders
+                      Trusted by 500+ teams
                     </Typography>
                   </Stack>
                 </MotionBox>
@@ -474,7 +430,7 @@ export const HomePage: React.FC = () => {
         <Container maxWidth="xl">
           <Box sx={{ textAlign: "center", mb: 8 }}>
             <Typography variant="h2" sx={{ mb: 2, color: "text.primary" }}>
-              Everything you need to{" "}
+              Why{" "}
               <Box
                 component="span"
                 sx={{
@@ -483,8 +439,9 @@ export const HomePage: React.FC = () => {
                   WebkitTextFillColor: "transparent",
                 }}
               >
-                grow
+                Bigeen
               </Box>
+              ?
             </Typography>
             <Typography
               variant="body1"
@@ -495,13 +452,12 @@ export const HomePage: React.FC = () => {
                 mx: "auto",
               }}
             >
-              Powerful features wrapped in a simple, intuitive interface
-              designed for lean teams.
+              Powerful capabilities wrapped in a simple, intuitive approach.
             </Typography>
           </Box>
 
           <Grid container spacing={4}>
-            {FEATURES.map((feature) => (
+            {content.features.map((feature) => (
               <Grid size={{ xs: 12, sm: 6, md: 4 }} key={feature.id}>
                 <FeatureCard
                   icon={
