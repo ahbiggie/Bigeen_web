@@ -11,6 +11,14 @@ export interface FeatureCardProps {
   showLearnMore?: boolean
 }
 
+// Feature (for FEATURES constant)
+export interface Feature {
+  id: string
+  title: string
+  description: string
+  icon: React.ElementType
+}
+
 // Team Member
 export interface TeamMemberSocials {
   linkedin?: string

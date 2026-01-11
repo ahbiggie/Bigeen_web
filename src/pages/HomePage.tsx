@@ -9,9 +9,38 @@ import {
   Grid,
 } from "@mui/material"
 import { ArrowForward, PlayArrow, Star } from "@mui/icons-material"
+import AutoGraphIcon from "@mui/icons-material/AutoGraph"
+import GppGoodIcon from "@mui/icons-material/GppGood"
+import BoltIcon from "@mui/icons-material/Bolt"
 import { motion } from "framer-motion"
 import { gradients, glassStyles, blobKeyframes } from "../theme/theme"
 import { FeatureCard } from "../components/ui/FeatureCard"
+import type { Feature } from "../types"
+
+// ============================================
+// FEATURES DATA
+// ============================================
+
+const FEATURES: Feature[] = [
+  {
+    id: "1",
+    title: "High Velocity",
+    description: "Built on Vite for sub-second load times and instant HMR.",
+    icon: BoltIcon,
+  },
+  {
+    id: "2",
+    title: "Enterprise Grade",
+    description: "Bank-level security standards baked into every endpoint.",
+    icon: GppGoodIcon,
+  },
+  {
+    id: "3",
+    title: "Data Visualization",
+    description: "Turning raw metrics into actionable, animated insights.",
+    icon: AutoGraphIcon,
+  },
+]
 
 // ============================================
 // MOTION COMPONENTS
@@ -107,46 +136,6 @@ const floatAnimation = {
 // ============================================
 
 export const HomePage: React.FC = () => {
-  const features = [
-    {
-      icon: (
-        <Box component="span" sx={{ fontSize: 28 }}>
-          🚀
-        </Box>
-      ),
-      title: "Smart Automation",
-      description:
-        "Automate complex workflows with our intelligent process engine.",
-    },
-    {
-      icon: (
-        <Box component="span" sx={{ fontSize: 28 }}>
-          📊
-        </Box>
-      ),
-      title: "Real-time Analytics",
-      description: "Deep insights with built-in analytics that just works.",
-    },
-    {
-      icon: (
-        <Box component="span" sx={{ fontSize: 28 }}>
-          🔒
-        </Box>
-      ),
-      title: "Enterprise Security",
-      description: "SOC2 compliant with zero-downtime guaranteed.",
-    },
-    {
-      icon: (
-        <Box component="span" sx={{ fontSize: 28 }}>
-          ⚡
-        </Box>
-      ),
-      title: "Instant Scalability",
-      description: "Infrastructure that grows effortlessly with your business.",
-    },
-  ]
-
   return (
     <Box>
       {/* ======================== HERO SECTION ======================== */}
@@ -512,9 +501,15 @@ export const HomePage: React.FC = () => {
           </Box>
 
           <Grid container spacing={4}>
-            {features.map((feature, index) => (
-              <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index}>
-                <FeatureCard {...feature} />
+            {FEATURES.map((feature) => (
+              <Grid size={{ xs: 12, sm: 6, md: 4 }} key={feature.id}>
+                <FeatureCard
+                  icon={
+                    <feature.icon sx={{ fontSize: 28, color: "#667eea" }} />
+                  }
+                  title={feature.title}
+                  description={feature.description}
+                />
               </Grid>
             ))}
           </Grid>

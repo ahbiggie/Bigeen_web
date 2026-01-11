@@ -6,56 +6,37 @@ import {
   Link,
   IconButton,
   Divider,
+  Stack,
 } from "@mui/material"
-import { LinkedIn, Twitter, GitHub, Language } from "@mui/icons-material"
+import { LinkedIn, Twitter, GitHub } from "@mui/icons-material"
 import { Link as RouterLink } from "react-router-dom"
-import type { FooterLinkSection, NavLinkProps } from "../types"
+import { gradients } from "../theme/theme"
 
-interface FooterProps {
-  sections?: FooterLinkSection[]
-}
+// ============================================
+// FOOTER LINK DATA
+// ============================================
 
-const defaultSections: FooterLinkSection[] = [
-  {
-    title: "Product",
-    links: [
-      { label: "Features", href: "/#features" },
-      { label: "Integrations", href: "/#integrations" },
-      { label: "Pricing", href: "/#pricing" },
-      { label: "Changelog", href: "/#changelog" },
-    ],
-  },
-  {
-    title: "Company",
-    links: [
-      { label: "About", href: "/about" },
-      { label: "Roadmap", href: "/roadmap" },
-      { label: "Contact", href: "/contact" },
-      { label: "Blog", href: "/#blog" },
-    ],
-  },
-  {
-    title: "Resources",
-    links: [
-      { label: "Documentation", href: "/#docs" },
-      { label: "API Access", href: "/#api" },
-      { label: "Support", href: "/contact" },
-      { label: "Status", href: "/#status" },
-    ],
-  },
-  {
-    title: "Legal",
-    links: [
-      { label: "Privacy", href: "/#privacy" },
-      { label: "Terms", href: "/#terms" },
-      { label: "Security", href: "/#security" },
-    ],
-  },
+const companyLinks = [
+  { label: "About", href: "/about" },
+  { label: "Roadmap", href: "/roadmap" },
+  { label: "Contact", href: "/contact" },
+  { label: "Careers", href: "/#careers" },
 ]
 
-export const Footer: React.FC<FooterProps> = ({
-  sections = defaultSections,
-}) => {
+const resourceLinks = [
+  { label: "Documentation", href: "/#docs" },
+  { label: "API Reference", href: "/#api" },
+  { label: "Blog", href: "/#blog" },
+  { label: "Support", href: "/contact" },
+]
+
+// ============================================
+// FOOTER COMPONENT
+// ============================================
+
+export const Footer: React.FC = () => {
+  const currentYear = new Date().getFullYear()
+
   return (
     <Box
       component="footer"
@@ -69,16 +50,17 @@ export const Footer: React.FC<FooterProps> = ({
     >
       <Container maxWidth="xl">
         <Grid container spacing={4}>
-          {/* Brand Section */}
-          <Grid item xs={12} md={4}>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
+          {/* ============ COLUMN 1: Brand ============ */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <Box
+              sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 2 }}
+            >
               <Box
                 sx={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: 1,
-                  background:
-                    "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                  width: 40,
+                  height: 40,
+                  borderRadius: 1.5,
+                  background: gradients.accent,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -86,7 +68,7 @@ export const Footer: React.FC<FooterProps> = ({
               >
                 <Typography
                   variant="h6"
-                  sx={{ color: "white", fontWeight: 700 }}
+                  sx={{ color: "white", fontWeight: 800 }}
                 >
                   B
                 </Typography>
@@ -98,124 +80,146 @@ export const Footer: React.FC<FooterProps> = ({
             <Typography
               variant="body2"
               sx={{
-                color: "rgba(255, 255, 255, 0.7)",
+                color: "rgba(255, 255, 255, 0.65)",
                 mb: 3,
-                maxWidth: 320,
+                maxWidth: 300,
                 lineHeight: 1.7,
               }}
             >
               The all-in-one platform for modern SaaS businesses. Automate
-              workflows, analyze data, and scale infinitely with our
-              cutting-edge tools.
+              workflows, analyze data, and scale infinitely.
             </Typography>
-            <Box sx={{ display: "flex", gap: 1 }}>
-              <IconButton
-                sx={{
-                  color: "rgba(255, 255, 255, 0.7)",
-                  "&:hover": {
-                    color: "white",
-                    backgroundColor: "rgba(255, 255, 255, 0.1)",
-                  },
-                }}
-              >
-                <LinkedIn />
-              </IconButton>
-              <IconButton
-                sx={{
-                  color: "rgba(255, 255, 255, 0.7)",
-                  "&:hover": {
-                    color: "white",
-                    backgroundColor: "rgba(255, 255, 255, 0.1)",
-                  },
-                }}
-              >
-                <Twitter />
-              </IconButton>
-              <IconButton
-                sx={{
-                  color: "rgba(255, 255, 255, 0.7)",
-                  "&:hover": {
-                    color: "white",
-                    backgroundColor: "rgba(255, 255, 255, 0.1)",
-                  },
-                }}
-              >
-                <GitHub />
-              </IconButton>
-              <IconButton
-                sx={{
-                  color: "rgba(255, 255, 255, 0.7)",
-                  "&:hover": {
-                    color: "white",
-                    backgroundColor: "rgba(255, 255, 255, 0.1)",
-                  },
-                }}
-              >
-                <Language />
-              </IconButton>
-            </Box>
+            <Stack direction="row" spacing={1}>
+              {[
+                { icon: LinkedIn, href: "#" },
+                { icon: Twitter, href: "#" },
+                { icon: GitHub, href: "#" },
+              ].map(({ icon: Icon, href }, index) => (
+                <IconButton
+                  key={index}
+                  component="a"
+                  href={href}
+                  size="small"
+                  sx={{
+                    color: "rgba(255, 255, 255, 0.6)",
+                    "&:hover": {
+                      color: "white",
+                      backgroundColor: "rgba(255, 255, 255, 0.1)",
+                    },
+                  }}
+                >
+                  <Icon fontSize="small" />
+                </IconButton>
+              ))}
+            </Stack>
           </Grid>
 
-          {/* Links Sections */}
-          {sections.map((section) => (
-            <Grid item xs={6} sm={6} md={2} key={section.title}>
-              <Typography
-                variant="subtitle2"
-                sx={{
-                  fontWeight: 700,
-                  mb: 2,
-                  fontSize: "0.875rem",
-                  textTransform: "uppercase",
-                  letterSpacing: 0.5,
-                }}
-              >
-                {section.title}
-              </Typography>
-              <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-                {section.links.map((link) =>
-                  link.href.startsWith("/") && !link.href.includes("#") ? (
-                    <Link
-                      key={link.label}
-                      component={RouterLink}
-                      to={link.href}
-                      underline="none"
-                      sx={{
-                        color: "rgba(255, 255, 255, 0.7)",
-                        fontSize: "0.875rem",
-                        transition: "color 0.2s",
-                        "&:hover": {
-                          color: "white",
-                        },
-                      }}
-                    >
-                      {link.label}
-                    </Link>
-                  ) : (
-                    <Link
-                      key={link.label}
-                      href={link.href}
-                      underline="none"
-                      sx={{
-                        color: "rgba(255, 255, 255, 0.7)",
-                        fontSize: "0.875rem",
-                        transition: "color 0.2s",
-                        "&:hover": {
-                          color: "white",
-                        },
-                      }}
-                    >
-                      {link.label}
-                    </Link>
-                  )
-                )}
-              </Box>
-            </Grid>
-          ))}
+          {/* ============ COLUMN 2: Company ============ */}
+          <Grid size={{ xs: 6, md: 4 }}>
+            <Typography
+              variant="subtitle2"
+              sx={{
+                fontWeight: 700,
+                mb: 2.5,
+                fontSize: "0.8rem",
+                textTransform: "uppercase",
+                letterSpacing: 1,
+                color: "rgba(255, 255, 255, 0.9)",
+              }}
+            >
+              Company
+            </Typography>
+            <Stack spacing={1.5}>
+              {companyLinks.map((link) =>
+                link.href.startsWith("/") && !link.href.includes("#") ? (
+                  <Link
+                    key={link.label}
+                    component={RouterLink}
+                    to={link.href}
+                    underline="none"
+                    sx={{
+                      color: "rgba(255, 255, 255, 0.6)",
+                      fontSize: "0.875rem",
+                      transition: "color 0.2s",
+                      "&:hover": { color: "white" },
+                    }}
+                  >
+                    {link.label}
+                  </Link>
+                ) : (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    underline="none"
+                    sx={{
+                      color: "rgba(255, 255, 255, 0.6)",
+                      fontSize: "0.875rem",
+                      transition: "color 0.2s",
+                      "&:hover": { color: "white" },
+                    }}
+                  >
+                    {link.label}
+                  </Link>
+                )
+              )}
+            </Stack>
+          </Grid>
+
+          {/* ============ COLUMN 3: Resources ============ */}
+          <Grid size={{ xs: 6, md: 4 }}>
+            <Typography
+              variant="subtitle2"
+              sx={{
+                fontWeight: 700,
+                mb: 2.5,
+                fontSize: "0.8rem",
+                textTransform: "uppercase",
+                letterSpacing: 1,
+                color: "rgba(255, 255, 255, 0.9)",
+              }}
+            >
+              Resources
+            </Typography>
+            <Stack spacing={1.5}>
+              {resourceLinks.map((link) =>
+                link.href.startsWith("/") && !link.href.includes("#") ? (
+                  <Link
+                    key={link.label}
+                    component={RouterLink}
+                    to={link.href}
+                    underline="none"
+                    sx={{
+                      color: "rgba(255, 255, 255, 0.6)",
+                      fontSize: "0.875rem",
+                      transition: "color 0.2s",
+                      "&:hover": { color: "white" },
+                    }}
+                  >
+                    {link.label}
+                  </Link>
+                ) : (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    underline="none"
+                    sx={{
+                      color: "rgba(255, 255, 255, 0.6)",
+                      fontSize: "0.875rem",
+                      transition: "color 0.2s",
+                      "&:hover": { color: "white" },
+                    }}
+                  >
+                    {link.label}
+                  </Link>
+                )
+              )}
+            </Stack>
+          </Grid>
         </Grid>
 
-        <Divider sx={{ my: 4, borderColor: "rgba(255, 255, 255, 0.1)" }} />
+        <Divider sx={{ my: 5, borderColor: "rgba(255, 255, 255, 0.08)" }} />
 
-        {/* Bottom Section */}
+        {/* ============ BOTTOM BAR ============ */}
         <Box
           sx={{
             display: "flex",
@@ -227,16 +231,16 @@ export const Footer: React.FC<FooterProps> = ({
         >
           <Typography
             variant="body2"
-            sx={{ color: "rgba(255, 255, 255, 0.6)", fontSize: "0.813rem" }}
+            sx={{ color: "rgba(255, 255, 255, 0.5)", fontSize: "0.813rem" }}
           >
-            © {new Date().getFullYear()} Bigeen Solutions. All rights reserved.
+            © {currentYear} Bigeen Solutions. All rights reserved.
           </Typography>
-          <Box sx={{ display: "flex", gap: 3 }}>
+          <Stack direction="row" spacing={3}>
             <Link
               href="#privacy"
               underline="none"
               sx={{
-                color: "rgba(255, 255, 255, 0.6)",
+                color: "rgba(255, 255, 255, 0.5)",
                 fontSize: "0.813rem",
                 "&:hover": { color: "white" },
               }}
@@ -247,14 +251,14 @@ export const Footer: React.FC<FooterProps> = ({
               href="#terms"
               underline="none"
               sx={{
-                color: "rgba(255, 255, 255, 0.6)",
+                color: "rgba(255, 255, 255, 0.5)",
                 fontSize: "0.813rem",
                 "&:hover": { color: "white" },
               }}
             >
               Terms of Service
             </Link>
-          </Box>
+          </Stack>
         </Box>
       </Container>
     </Box>
