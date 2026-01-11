@@ -206,24 +206,60 @@ export const ContactForm: React.FC = () => {
       severity: "info",
     })
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    // SECURITY: Use the environment variable
+    const endpoint = import.meta.env.VITE_FORMSPREE_ENDPOINT
 
-    console.log("Form submitted:", {
-      ...contactForm,
-      appMode,
-      submittedAt: new Date().toISOString(),
-    })
+    if (!endpoint) {
+      console.error("Missing VITE_FORMSPREE_ENDPOINT in .env file")
+      setIsSubmitting(false)
+      setSnackbar({
+        open: true,
+        message: "Configuration error. Please try again later.",
+        severity: "error",
+      })
+      return
+    }
 
-    setIsSubmitting(false)
-    setSnackbar({
-      open: true,
-      message: "Message sent successfully! We'll get back to you soon.",
-      severity: "success",
-    })
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: contactForm.fullName,
+          email: contactForm.workEmail,
+          company: contactForm.companyName,
+          projectType: contactForm.topic,
+          message: contactForm.message,
+          appMode,
+          submittedAt: new Date().toISOString(),
+        }),
+      })
 
-    // Reset form after successful submission
-    resetContactForm()
+      if (response.ok) {
+        setIsSubmitting(false)
+        setSnackbar({
+          open: true,
+          message: "Message sent successfully! We'll get back to you soon.",
+          severity: "success",
+        })
+        resetContactForm()
+      } else {
+        setIsSubmitting(false)
+        setSnackbar({
+          open: true,
+          message: "Failed to send message. Please try again.",
+          severity: "error",
+        })
+      }
+    } catch (error) {
+      console.error("Submission Error:", error)
+      setIsSubmitting(false)
+      setSnackbar({
+        open: true,
+        message: "Network error. Please check your connection.",
+        severity: "error",
+      })
+    }
   }
 
   // Clear field error on change
