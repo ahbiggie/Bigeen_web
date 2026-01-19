@@ -18,8 +18,8 @@ export const ModeSwitch: React.FC = () => {
   const { appMode, setAppMode } = useBigeenStore()
 
   const modes: { value: ViewMode; label: string }[] = [
-    { value: "Software", label: "Software" },
-    { value: "General Consulting", label: "Consulting" },
+    { value: "tech", label: "Technology" },
+    { value: "consult", label: "Consulting" },
   ]
 
   return (
@@ -32,11 +32,11 @@ export const ModeSwitch: React.FC = () => {
         position: "relative",
       }}
     >
-      {modes.map((mode) => (
+      {modes.map((item) => (
         <MotionBox
-          key={mode.value}
-          onClick={() => setAppMode(mode.value)}
-          whileHover={{ scale: appMode === mode.value ? 1 : 1.02 }}
+          key={item.value}
+          onClick={() => setAppMode(item.value)}
+          whileHover={{ scale: appMode === item.value ? 1 : 1.02 }}
           whileTap={{ scale: 0.98 }}
           sx={{
             px: 3,
@@ -49,7 +49,7 @@ export const ModeSwitch: React.FC = () => {
           }}
         >
           {/* Active Background Indicator */}
-          {appMode === mode.value && (
+          {appMode === item.value && (
             <MotionBox
               layoutId="activeMode"
               initial={false}
@@ -74,12 +74,12 @@ export const ModeSwitch: React.FC = () => {
             sx={{
               fontWeight: 600,
               fontSize: "0.875rem",
-              color: appMode === mode.value ? "white" : "text.secondary",
+              color: appMode === item.value ? "white" : "text.secondary",
               transition: "color 0.2s ease",
               userSelect: "none",
             }}
           >
-            {mode.label}
+            {item.label}
           </Typography>
         </MotionBox>
       ))}

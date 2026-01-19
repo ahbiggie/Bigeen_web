@@ -111,7 +111,7 @@ const floatAnimation = {
 
 export const HomePage: React.FC = () => {
   const { appMode } = useBigeenStore()
-  const content = appMode === "Software" ? CONTENT.dev : CONTENT.consult
+  const content = appMode === "tech" ? CONTENT.tech : CONTENT.consult
 
   return (
     <Box>
@@ -217,6 +217,8 @@ export const HomePage: React.FC = () => {
                         variant="contained"
                         size="large"
                         endIcon={<ArrowForward />}
+                        component={Link}
+                        to="/contact"
                         sx={{
                           background: gradients.primary,
                           px: 4,
@@ -238,6 +240,8 @@ export const HomePage: React.FC = () => {
                         variant="outlined"
                         size="large"
                         startIcon={<PlayArrow />}
+                        component={Link}
+                        to="/about"
                         sx={{
                           ...glassStyles.light,
                           borderColor: "transparent",

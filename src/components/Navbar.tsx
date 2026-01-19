@@ -13,6 +13,7 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
+  Divider,
 } from "@mui/material"
 import { Menu as MenuIcon, Close as CloseIcon } from "@mui/icons-material"
 import { useState } from "react"
@@ -46,6 +47,124 @@ export const Navbar: React.FC = () => {
     setMobileMenuOpen(!mobileMenuOpen)
   }
 
+  // Mobile Drawer Content
+  const drawerContent = (
+    <Box
+      sx={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        p: 3,
+        background:
+          "linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%)",
+        backdropFilter: "blur(20px)",
+      }}
+    >
+      {/* Drawer Header */}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 4,
+        }}
+      >
+        <Box
+          component={RouterLink}
+          to="/"
+          onClick={handleDrawerToggle}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1.5,
+            textDecoration: "none",
+          }}
+        >
+          <Box
+            component="img"
+            src={bigeenLogo}
+            alt="Bigeen Logo"
+            sx={{
+              width: 32,
+              height: 32,
+              borderRadius: 1.5,
+              objectFit: "contain",
+            }}
+          />
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 700,
+              color: "text.primary",
+            }}
+          >
+            Bigeen
+          </Typography>
+        </Box>
+        <IconButton onClick={handleDrawerToggle}>
+          <CloseIcon />
+        </IconButton>
+      </Box>
+
+      {/* Navigation Links */}
+      <List sx={{ flexGrow: 1 }}>
+        {navItems.map((item, index) => (
+          <motion.div
+            key={item.label}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: index * 0.1 }}
+          >
+            <ListItem disablePadding sx={{ mb: 1.5 }}>
+              <ListItemButton
+                component={RouterLink}
+                to={item.path}
+                onClick={handleDrawerToggle}
+                selected={location.pathname === item.path}
+                sx={{
+                  borderRadius: 2,
+                  "&.Mui-selected": {
+                    backgroundColor: "rgba(102, 126, 234, 0.15)",
+                  },
+                  "&:hover": {
+                    backgroundColor: "rgba(102, 126, 234, 0.1)",
+                  },
+                }}
+              >
+                <ListItemText
+                  primary={item.label}
+                  primaryTypographyProps={{
+                    fontWeight: location.pathname === item.path ? 600 : 500,
+                    fontSize: "1.1rem",
+                  }}
+                />
+              </ListItemButton>
+            </ListItem>
+          </motion.div>
+        ))}
+      </List>
+
+      {/* Mobile CTA */}
+      <Box sx={{ mt: "auto" }}>
+        <Divider sx={{ mb: 3 }} />
+        <MotionBox whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+          <Button
+            fullWidth
+            variant="contained"
+            size="large"
+            color="primary"
+            component={RouterLink}
+            to="/contact"
+            onClick={handleDrawerToggle}
+            sx={{ py: 1.5, borderRadius: 3 }}
+          >
+            Get a consult
+          </Button>
+        </MotionBox>
+      </Box>
+    </Box>
+  )
+
   return (
     <>
       <AppBar
@@ -55,11 +174,20 @@ export const Navbar: React.FC = () => {
           ...glassStyles.navbar,
           top: 0,
           zIndex: 1100,
+          width: "100%",
+          left: 0,
+          right: 0,
         }}
       >
-        <Container maxWidth="xl">
-          <Toolbar sx={{ justifyContent: "space-between", py: 1 }}>
-            {/* Logo */}
+        <Container maxWidth={false} sx={{ px: { xs: 2, sm: 3, md: 4 } }}>
+          <Toolbar
+            sx={{
+              justifyContent: "space-between",
+              py: 1,
+              minHeight: { xs: 56, sm: 64 },
+            }}
+            disableGutters
+          >
             <Box
               component={RouterLink}
               to="/"
@@ -86,7 +214,7 @@ export const Navbar: React.FC = () => {
                     objectFit: "contain",
                   }}
                 />
-                <Typography
+                {/* <Typography
                   variant="h6"
                   sx={{
                     fontWeight: 700,
@@ -94,8 +222,8 @@ export const Navbar: React.FC = () => {
                     fontSize: { xs: "1.1rem", md: "1.25rem" },
                   }}
                 >
-                  Bigeen
-                </Typography>
+                  Solutions
+                </Typography> */}
               </MotionBox>
             </Box>
 
@@ -143,43 +271,18 @@ export const Navbar: React.FC = () => {
 
             {/* CTA Buttons */}
             <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-              {!isMobile && (
-                <Button
-                  variant="text"
-                  sx={{
-                    color: "text.primary",
-                    fontWeight: 600,
-                    "&:hover": {
-                      backgroundColor: "rgba(102, 126, 234, 0.08)",
-                    },
-                  }}
-                >
-                  Log In
-                </Button>
-              )}
               <MotionBox
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
               >
                 <Button
                   variant="contained"
-                  sx={{
-                    background:
-                      "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                    color: "white",
-                    fontWeight: 600,
-                    px: { xs: 2, md: 3 },
-                    borderRadius: 2,
-                    textTransform: "none",
-                    boxShadow: "0 4px 14px rgba(102, 126, 234, 0.4)",
-                    "&:hover": {
-                      background:
-                        "linear-gradient(135deg, #5568d3 0%, #6a3f8f 100%)",
-                      boxShadow: "0 8px 25px rgba(102, 126, 234, 0.5)",
-                    },
-                  }}
+                  color="primary"
+                  sx={{ ml: 2 }}
+                  component={RouterLink}
+                  to="/contact"
                 >
-                  Get a Consult
+                  Get in touch
                 </Button>
               </MotionBox>
               {isMobile && (
@@ -200,52 +303,17 @@ export const Navbar: React.FC = () => {
         anchor="right"
         open={mobileMenuOpen}
         onClose={handleDrawerToggle}
-        sx={{
-          "& .MuiDrawer-paper": {
-            width: 280,
-            pt: 2,
-            ...glassStyles.medium,
+        ModalProps={{ keepMounted: true }}
+        PaperProps={{
+          sx: {
+            width: "85%",
+            maxWidth: 320,
+            background: "transparent",
+            boxShadow: "none",
           },
         }}
       >
-        <Box sx={{ display: "flex", justifyContent: "flex-end", px: 2 }}>
-          <IconButton onClick={handleDrawerToggle}>
-            <CloseIcon />
-          </IconButton>
-        </Box>
-        <List>
-          {navItems.map((item, index) => (
-            <motion.div
-              key={item.label}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <ListItem disablePadding>
-                <ListItemButton
-                  component={RouterLink}
-                  to={item.path}
-                  onClick={handleDrawerToggle}
-                  selected={location.pathname === item.path}
-                  sx={{
-                    borderRadius: 2,
-                    mx: 1,
-                    "&.Mui-selected": {
-                      backgroundColor: "rgba(102, 126, 234, 0.15)",
-                    },
-                  }}
-                >
-                  <ListItemText
-                    primary={item.label}
-                    primaryTypographyProps={{
-                      fontWeight: location.pathname === item.path ? 600 : 500,
-                    }}
-                  />
-                </ListItemButton>
-              </ListItem>
-            </motion.div>
-          ))}
-        </List>
+        {drawerContent}
       </Drawer>
     </>
   )

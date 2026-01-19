@@ -1,88 +1,98 @@
-import BoltIcon from "@mui/icons-material/Bolt"
-import GppGoodIcon from "@mui/icons-material/GppGood"
 import AutoGraphIcon from "@mui/icons-material/AutoGraph"
-import HandshakeIcon from "@mui/icons-material/Handshake"
 import PsychologyIcon from "@mui/icons-material/Psychology"
-import LightbulbIcon from "@mui/icons-material/Lightbulb"
+import ConstructionIcon from "@mui/icons-material/Construction"
+import StorageIcon from "@mui/icons-material/Storage"
+import LanIcon from "@mui/icons-material/Lan"
+import VerifiedUserIcon from "@mui/icons-material/VerifiedUser"
 import type { SvgIconComponent } from "@mui/icons-material"
 
-// Define the shape of our content
-export type ViewMode = "Software" | "General Consulting"
+export type ViewMode = "tech" | "consult"
 
-export interface HeroContent {
-  headline: React.ReactNode
+interface HeroContent {
+  headline: string
   subhead: string
   ctaPrimary: string
   ctaSecondary: string
 }
 
-export interface FeatureItem {
+interface FeatureItem {
   id: string
   title: string
   description: string
   icon: SvgIconComponent
 }
 
-export const CONTENT = {
-  dev: {
+interface ContentConfig {
+  hero: HeroContent
+  features: FeatureItem[]
+}
+
+export const CONTENT: Record<ViewMode, ContentConfig> = {
+  // MODE A: TECHNOLOGY (SaaS & Custom Tools)
+  tech: {
     hero: {
-      headline: "Building the Future of Digital Solutions",
+      headline: "Automate the Routine. Scale the Impact.",
       subhead:
-        "We craft robust, scalable, and high-performance web applications tailored to your business needs.",
-      ctaPrimary: "View Projects",
-      ctaSecondary: "Get a Quote",
+        "We don't just write code; we install the 'Business Operating Systems' that survive African realities. From SaaS enablement to custom automation, we build the digital backbone your business needs.",
+      ctaPrimary: "View Solutions",
+      ctaSecondary: "Get a Tech Audit",
     },
     features: [
       {
-        id: "d1",
-        title: "High Velocity",
-        description: "Built on Vite for sub-second load times.",
-        icon: BoltIcon,
+        id: "t1",
+        title: "SaaS Implementation",
+        description:
+          "Curated selection, installation, and team training for HR, Accounting, and CRM tools.",
+        icon: StorageIcon,
       },
       {
-        id: "d2",
-        title: "Enterprise Grade",
-        description: "Bank-level security standards baked into every endpoint.",
-        icon: GppGoodIcon,
+        id: "t2",
+        title: "Workflow Automation",
+        description:
+          "Connecting your disconnected systems to eliminate manual data entry and human error.",
+        icon: LanIcon,
       },
       {
-        id: "d3",
-        title: "Data Visualization",
-        description: "Turning raw metrics into actionable, animated insights.",
-        icon: AutoGraphIcon,
+        id: "t3",
+        title: "Custom Development",
+        description:
+          "Building proprietary tools when off-the-shelf software falls short of your unique needs.",
+        icon: ConstructionIcon,
       },
-    ] as FeatureItem[],
+    ],
   },
+
+  // MODE B: CONSULTING (Strategy & Operations)
   consult: {
     hero: {
-      headline: "Strategic Engineering for Complex Problems",
+      headline: "From Chaotic Survival to Sustainable Scale.",
       subhead:
-        "We don't just write code. We audit, architect, and optimize your digital infrastructure for scale.",
-      ctaPrimary: "Book Consultation",
-      ctaSecondary: "View Case Studies",
+        "80% of SMEs fail due to broken operations. We combine strategy with execution to fix your financial health, operational maturity, and compliance gaps.",
+      ctaPrimary: "Book a Consultation",
+      ctaSecondary: "Our Methodology",
     },
     features: [
       {
         id: "c1",
-        title: "Technical Audits",
+        title: "Business Diagnostics",
         description:
-          "Deep-dive analysis of your current stack to find bottlenecks.",
+          '2–4 week deep-dive into your cash flow, systems, and "Skill, Will, Opportunity" gaps.',
         icon: PsychologyIcon,
       },
       {
         id: "c2",
-        title: "Architecture Design",
+        title: "Process Architecture",
         description:
-          "Blueprinting scalable systems before a single line of code is written.",
-        icon: LightbulbIcon,
+          "Structuring your org chart and SOPs so the business runs without you.",
+        icon: AutoGraphIcon,
       },
       {
         id: "c3",
-        title: "Team Augmentation",
+        title: "Risk & Compliance",
         description:
-          "Embedding senior engineering leadership into your existing squads.",
-        icon: HandshakeIcon,
+          "Navigating regulatory hurdles (CAC, FIRS) to secure your foundation.",
+        icon: VerifiedUserIcon,
       },
-    ] as FeatureItem[],
+    ],
   },
 }
