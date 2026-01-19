@@ -153,9 +153,8 @@ export const ContactForm: React.FC = () => {
 
   // Get project types based on current app mode
   const projectTypes =
-    appMode === "Software" ? softwareProjectTypes : consultingProjectTypes
+    appMode === "consult" ? consultingProjectTypes : softwareProjectTypes
 
-  // Set default topic when mode changes (if topic is empty or not in current list)
   useEffect(() => {
     if (!contactForm.topic || !projectTypes.includes(contactForm.topic)) {
       setContactFormField("topic", projectTypes[0])
@@ -265,7 +264,7 @@ export const ContactForm: React.FC = () => {
   // Clear field error on change
   const handleFieldChange = (
     field: keyof typeof contactForm,
-    value: string
+    value: string,
   ) => {
     setContactFormField(field, value)
     if (errors[field as keyof FormErrors]) {
@@ -355,7 +354,7 @@ export const ContactForm: React.FC = () => {
                 multiline
                 rows={5}
                 placeholder={
-                  appMode === "Software"
+                  appMode === "tech"
                     ? "Tell us about the application you want to build..."
                     : "Describe the challenges you're facing and how we can help..."
                 }
