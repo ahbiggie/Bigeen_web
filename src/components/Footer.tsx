@@ -1,12 +1,12 @@
 import {
   Box,
   Container,
-  Grid,
   Typography,
   Link,
   IconButton,
   Divider,
   Stack,
+  Grid,
 } from "@mui/material"
 import { LinkedIn, Twitter, GitHub } from "@mui/icons-material"
 import { Link as RouterLink } from "react-router-dom"
@@ -17,17 +17,17 @@ import { gradients } from "../theme/theme"
 // ============================================
 
 const companyLinks = [
-  { label: "About", href: "/about" },
-  { label: "Roadmap", href: "/roadmap" },
-  { label: "Contact", href: "/contact" },
+  { label: "About Us", href: "/about" },
+  { label: "Strategic Roadmap", href: "/roadmap" },
+  { label: "Contact HQ", href: "/contact" },
   { label: "Careers", href: "/#careers" },
 ]
 
 const resourceLinks = [
-  { label: "Documentation", href: "/#docs" },
-  { label: "API Reference", href: "/#api" },
-  { label: "Blog", href: "/#blog" },
-  { label: "Support", href: "/contact" },
+  { label: "Our Methodology", href: "/about" },
+  { label: "Case Studies", href: "/roadmap" }, // Pointing to roadmap/projects
+  { label: "Insights & Blog", href: "/#blog" },
+  { label: "Client Support", href: "/contact" },
 ]
 
 // ============================================
@@ -46,11 +46,12 @@ export const Footer: React.FC = () => {
         pt: 8,
         pb: 4,
         mt: "auto",
+        borderTop: "1px solid rgba(255,255,255,0.1)",
       }}
     >
       <Container maxWidth="xl">
         <Grid container spacing={4}>
-          {/* ============ COLUMN 1: Brand ============ */}
+          {/* ============ COLUMN 1: Brand & Mission ============ */}
           <Grid size={{ xs: 12, md: 4 }}>
             <Box
               sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 2 }}
@@ -82,12 +83,13 @@ export const Footer: React.FC = () => {
               sx={{
                 color: "rgba(255, 255, 255, 0.65)",
                 mb: 3,
-                maxWidth: 300,
+                maxWidth: 320,
                 lineHeight: 1.7,
               }}
             >
-              The all-in-one platform for modern SaaS businesses. Automate
-              workflows, analyze data, and scale infinitely.
+              We build the operational infrastructure African businesses need to
+              scale. Bridging the gap between high-level strategy and pragmatic
+              digital execution.
             </Typography>
             <Stack direction="row" spacing={1}>
               {[
@@ -160,7 +162,7 @@ export const Footer: React.FC = () => {
                   >
                     {link.label}
                   </Link>
-                )
+                ),
               )}
             </Stack>
           </Grid>
@@ -211,7 +213,7 @@ export const Footer: React.FC = () => {
                   >
                     {link.label}
                   </Link>
-                )
+                ),
               )}
             </Stack>
           </Grid>
@@ -233,7 +235,7 @@ export const Footer: React.FC = () => {
             variant="body2"
             sx={{ color: "rgba(255, 255, 255, 0.5)", fontSize: "0.813rem" }}
           >
-            © {currentYear} Bigeen Solutions. All rights reserved.
+            © {currentYear} Bigeen Solutions Limited. Abuja, Nigeria.
           </Typography>
           <Stack direction="row" spacing={3}>
             <Link

@@ -1,7 +1,6 @@
 import {
   Box,
   Container,
-  Grid,
   Typography,
   TextField,
   Button,
@@ -11,6 +10,10 @@ import {
   AccordionSummary,
   AccordionDetails,
   Stack,
+  CircularProgress,
+  Snackbar,
+  Alert,
+  Grid,
 } from "@mui/material"
 import {
   Email,
@@ -22,7 +25,9 @@ import {
   ExpandMore,
   Send,
 } from "@mui/icons-material"
+import { useState } from "react"
 import { useBigeenStore } from "../store/useBigeenStore"
+import { gradients } from "../theme/theme" // Ensure imports exist
 import type { ContactInfo, FAQItem } from "../types"
 
 interface ContactPageProps {
@@ -31,38 +36,48 @@ interface ContactPageProps {
 
 const defaultFAQs: FAQItem[] = [
   {
-    question: "What is the typical response time?",
+    question: "How does the Business Diagnostic work?",
     answer:
-      "We typically respond to all inquiries within 24 hours during business days. For urgent matters, please call us directly.",
+      "Our diagnostic is a 2-4 week engagement where we deep-dive into your financials, operations, and compliance. You get a prioritized action plan to fix bottlenecks immediately.",
   },
   {
-    question: "Do you offer custom integrations?",
+    question: "Do you build custom software or use existing tools?",
     answer:
-      "Yes! We offer custom integration services for enterprise clients. Our team can work with your existing tech stack to create seamless workflows.",
+      "We believe in pragmatism. We implement proven SaaS tools (CRM, HR, Accounting) first. We only build custom software when off-the-shelf solutions cannot meet your specific operational needs.",
   },
   {
-    question: "Where is your headquarters located?",
+    question: "What industries do you specialize in?",
     answer:
-      "Our headquarters is located at 123 Innovation Dr, Tech City. We also have remote teams across multiple time zones to serve you better.",
+      "We focus on high-growth African SMEs in Logistics, Fintech, Retail, and Healthcare—sectors where operational efficiency directly impacts the bottom line.",
+  },
+  {
+    question: "Can I hire you for just strategy or just tech?",
+    answer:
+      "Yes. While our Hybrid Model offers the most value, we offer standalone 'Strategic Consulting' or 'SaaS Implementation' packages tailored to your current stage.",
   },
 ]
 
 export const ContactPage: React.FC<ContactPageProps> = ({
   faqs = defaultFAQs,
 }) => {
-  const { contactForm, setContactFormField, expandedFaq, setExpandedFaq } =
+  const { contactForm, setContactFormField, resetContactForm, expandedFaq, setExpandedFaq } =
     useBigeenStore()
+
+  // Local state for submission feedback
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle")
 
   const contactInfo: ContactInfo[] = [
     {
       icon: <Email sx={{ fontSize: 24, color: "#667eea" }} />,
       label: "Email us",
-      value: "bigeen08@gmail.com",
+      value: "hello@bigeen.solutions",
     },
     {
       icon: <Phone sx={{ fontSize: 24, color: "#667eea" }} />,
       label: "Call us",
-      value: "+234 567 8901",
+      value: "+234 (0) 800 BIGEEN",
     },
     {
       icon: <LocationOn sx={{ fontSize: 24, color: "#667eea" }} />,
@@ -71,18 +86,38 @@ export const ContactPage: React.FC<ContactPageProps> = ({
     },
   ]
 
+  //Service Pillars
   const topicOptions = [
+    "Business Diagnostic (Consulting)",
+    "SaaS Implementation",
+    "Custom Software Dev",
+    "Venture Studio / Investment",
     "General Inquiry",
-    "Sales",
-    "Technical Support",
-    "Partnership",
-    "Billing",
-    "Other",
   ]
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log("Form submitted:", contactForm)
+    setStatus("loading")
+
+    const endpoint = import.meta.env.VITE_FORMSPREE_ENDPOINT
+
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(contactForm),
+      })
+
+      if (response.ok) {
+        setStatus("success")
+        resetContactForm() // Reset form after successful submission
+      } else {
+        setStatus("error")
+      }
+    } catch (error) {
+      console.error("Submission Error:", error)
+      setStatus("error")
+    }
   }
 
   return (
@@ -93,9 +128,26 @@ export const ContactPage: React.FC<ContactPageProps> = ({
           background: "linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)",
           pt: { xs: 6, md: 8 },
           pb: { xs: 6, md: 8 },
+          position: "relative",
+          overflow: "hidden",
         }}
       >
-        <Container maxWidth="xl">
+        {/* Background Glow */}
+        <Box
+          sx={{
+            position: "absolute",
+            top: -100,
+            right: -100,
+            width: 500,
+            height: 500,
+            borderRadius: "50%",
+            background: gradients.accent,
+            opacity: 0.1,
+            filter: "blur(80px)",
+          }}
+        />
+
+        <Container maxWidth="xl" sx={{ position: "relative", zIndex: 1 }}>
           <Grid container spacing={6}>
             {/* Left Column - Contact Info */}
             <Grid size={{ xs: 12, md: 5 }}>
@@ -103,7 +155,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({
                 <Typography
                   variant="overline"
                   sx={{
-                    color: "#667eea",
+                    color: "primary.main",
                     fontWeight: 700,
                     fontSize: "0.813rem",
                     letterSpacing: 1.2,
@@ -123,7 +175,10 @@ export const ContactPage: React.FC<ContactPageProps> = ({
                     color: "text.primary",
                   }}
                 >
-                  Let's scale together.
+                  Let's fix your <br />
+                  <Box component="span" sx={{ color: "primary.main" }}>
+                    Infrastructure.
+                  </Box>
                 </Typography>
                 <Typography
                   variant="body1"
@@ -135,8 +190,9 @@ export const ContactPage: React.FC<ContactPageProps> = ({
                     maxWidth: 480,
                   }}
                 >
-                  Have a question about our integrated tools? Our team is ready
-                  to help you optimize your workflow and accelerate growth.
+                  Ready to move from survival to scale? Whether you need a
+                  operational diagnostic or a custom tech stack, our team in
+                  Abuja is ready to deploy.
                 </Typography>
 
                 {/* Contact Information Cards */}
@@ -207,9 +263,10 @@ export const ContactPage: React.FC<ContactPageProps> = ({
                         cursor: "pointer",
                         transition: "all 0.2s",
                         "&:hover": {
-                          borderColor: "#667eea",
+                          borderColor: "primary.main",
                           backgroundColor: "rgba(102, 126, 234, 0.05)",
                           transform: "translateY(-2px)",
+                          color: "primary.main",
                         },
                       }}
                     >
@@ -228,7 +285,8 @@ export const ContactPage: React.FC<ContactPageProps> = ({
                   borderRadius: 3,
                   border: "1px solid",
                   borderColor: "divider",
-                  backgroundColor: "background.paper",
+                  backgroundColor: "rgba(255, 255, 255, 0.8)", // Glass effect
+                  backdropFilter: "blur(10px)",
                   boxShadow: "0 8px 32px rgba(0, 0, 0, 0.08)",
                 }}
               >
@@ -251,16 +309,20 @@ export const ContactPage: React.FC<ContactPageProps> = ({
                         </Typography>
                         <TextField
                           fullWidth
+                          required
                           placeholder="Jane Doe"
                           value={contactForm.fullName}
                           onChange={(e) =>
                             setContactFormField("fullName", e.target.value)
                           }
+                          disabled={status === "loading"}
                           sx={{
                             "& .MuiOutlinedInput-root": {
                               borderRadius: 2,
-                              backgroundColor: "background.default",
-                              "&:hover fieldset": { borderColor: "#667eea" },
+                              backgroundColor: "background.paper",
+                              "&:hover fieldset": {
+                                borderColor: "primary.main",
+                              },
                             },
                           }}
                         />
@@ -275,23 +337,27 @@ export const ContactPage: React.FC<ContactPageProps> = ({
                         </Typography>
                         <TextField
                           fullWidth
+                          required
                           type="email"
                           placeholder="jane@company.com"
                           value={contactForm.workEmail}
                           onChange={(e) =>
                             setContactFormField("workEmail", e.target.value)
                           }
+                          disabled={status === "loading"}
                           sx={{
                             "& .MuiOutlinedInput-root": {
                               borderRadius: 2,
-                              backgroundColor: "background.default",
-                              "&:hover fieldset": { borderColor: "#667eea" },
+                              backgroundColor: "background.paper",
+                              "&:hover fieldset": {
+                                borderColor: "primary.main",
+                              },
                             },
                           }}
                         />
                       </Grid>
 
-                      <Grid size={{ xs: 12 }}>
+                      <Grid size={12}>
                         <Typography
                           variant="body2"
                           sx={{ fontWeight: 600, mb: 1, color: "text.primary" }}
@@ -305,17 +371,20 @@ export const ContactPage: React.FC<ContactPageProps> = ({
                           onChange={(e) =>
                             setContactFormField("companyName", e.target.value)
                           }
+                          disabled={status === "loading"}
                           sx={{
                             "& .MuiOutlinedInput-root": {
                               borderRadius: 2,
-                              backgroundColor: "background.default",
-                              "&:hover fieldset": { borderColor: "#667eea" },
+                              backgroundColor: "background.paper",
+                              "&:hover fieldset": {
+                                borderColor: "primary.main",
+                              },
                             },
                           }}
                         />
                       </Grid>
 
-                      <Grid size={{ xs: 12 }}>
+                      <Grid size={12}>
                         <Typography
                           variant="body2"
                           sx={{ fontWeight: 600, mb: 1, color: "text.primary" }}
@@ -329,11 +398,14 @@ export const ContactPage: React.FC<ContactPageProps> = ({
                           onChange={(e) =>
                             setContactFormField("topic", e.target.value)
                           }
+                          disabled={status === "loading"}
                           sx={{
                             "& .MuiOutlinedInput-root": {
                               borderRadius: 2,
-                              backgroundColor: "background.default",
-                              "&:hover fieldset": { borderColor: "#667eea" },
+                              backgroundColor: "background.paper",
+                              "&:hover fieldset": {
+                                borderColor: "primary.main",
+                              },
                             },
                           }}
                         >
@@ -345,7 +417,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({
                         </TextField>
                       </Grid>
 
-                      <Grid size={{ xs: 12 }}>
+                      <Grid size={12}>
                         <Typography
                           variant="body2"
                           sx={{ fontWeight: 600, mb: 1, color: "text.primary" }}
@@ -354,32 +426,42 @@ export const ContactPage: React.FC<ContactPageProps> = ({
                         </Typography>
                         <TextField
                           fullWidth
+                          required
                           multiline
                           rows={4}
-                          placeholder="Tell us more about your project needs..."
+                          placeholder="Tell us about your operational bottlenecks..."
                           value={contactForm.message}
                           onChange={(e) =>
                             setContactFormField("message", e.target.value)
                           }
+                          disabled={status === "loading"}
                           sx={{
                             "& .MuiOutlinedInput-root": {
                               borderRadius: 2,
-                              backgroundColor: "background.default",
-                              "&:hover fieldset": { borderColor: "#667eea" },
+                              backgroundColor: "background.paper",
+                              "&:hover fieldset": {
+                                borderColor: "primary.main",
+                              },
                             },
                           }}
                         />
                       </Grid>
 
-                      <Grid size={{ xs: 12 }}>
+                      <Grid size={12}>
                         <Button
                           type="submit"
                           fullWidth
                           variant="contained"
-                          endIcon={<Send />}
+                          endIcon={
+                            status === "loading" ? (
+                              <CircularProgress size={20} color="inherit" />
+                            ) : (
+                              <Send />
+                            )
+                          }
+                          disabled={status === "loading"}
                           sx={{
-                            background:
-                              "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                            background: gradients.primary,
                             color: "white",
                             fontWeight: 600,
                             py: 1.75,
@@ -388,15 +470,14 @@ export const ContactPage: React.FC<ContactPageProps> = ({
                             fontSize: "1rem",
                             boxShadow: "0 8px 24px rgba(102, 126, 234, 0.4)",
                             "&:hover": {
-                              background:
-                                "linear-gradient(135deg, #5568d3 0%, #6a3f8f 100%)",
+                              background: gradients.accent,
                               boxShadow: "0 12px 32px rgba(102, 126, 234, 0.5)",
                               transform: "translateY(-2px)",
                             },
                             transition: "all 0.3s ease",
                           }}
                         >
-                          Send Message
+                          {status === "loading" ? "Sending..." : "Send Message"}
                         </Button>
                       </Grid>
                     </Grid>
@@ -439,6 +520,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({
                   borderRadius: "12px !important",
                   "&:before": { display: "none" },
                   "&.Mui-expanded": { margin: "0 !important", mb: 2 },
+                  backgroundColor: "background.default",
                 }}
               >
                 <AccordionSummary
@@ -469,6 +551,34 @@ export const ContactPage: React.FC<ContactPageProps> = ({
           </Stack>
         </Container>
       </Box>
+
+      {/* Success/Error Snackbars */}
+      <Snackbar
+        open={status === "success"}
+        autoHideDuration={6000}
+        onClose={() => setStatus("idle")}
+      >
+        <Alert
+          onClose={() => setStatus("idle")}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          Message sent! We will diagnose your request shortly.
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={status === "error"}
+        autoHideDuration={6000}
+        onClose={() => setStatus("idle")}
+      >
+        <Alert
+          onClose={() => setStatus("idle")}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          Transmission failed. Please try again later.
+        </Alert>
+      </Snackbar>
     </Box>
   )
 }
